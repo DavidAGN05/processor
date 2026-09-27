@@ -1,10 +1,20 @@
 module add (
-  input signed [7:0] a, b,
-  output [8:0] q);
+  input clk,
+  input rst,
+  input [7:0] a, b,
+  output [7:0] q);
+
+  reg [8:0] q_internal;
   
-  // sign extneding a and b to 10 bits to avoid overflow
-  wire [8:0] a_extended = $signed(a);
-  wire [8:0] b_extended = $signed(b);
+  always @(posedge clk) begin
+    if (rst) begin
+      q_internal <= 0;
+    end 
+    else begin
+      q_internal <= {a[7], a} + {b[7], b};
+    end
+  end
+
+  assign q = q_internal[7:0];
   
-  assign q = a_extended + b_extended;
 endmodule
