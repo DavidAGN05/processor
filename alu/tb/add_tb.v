@@ -2,9 +2,9 @@ module add_tb();
 
   reg clk = 1;
   reg rst = 1;
-  reg [7:0] a = 0;
-  reg [7:0] b = 0;
-  wire [7:0] q;
+  reg signed [7:0] a = 0;
+  reg signed [7:0] b = 0;
+  wire signed [8:0] q;
 
   integer period = 10;
 
