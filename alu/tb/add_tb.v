@@ -1,10 +1,14 @@
 module add_tb();
   
+  reg clk = 0;
+  reg rst = 0;
   reg [7:0] a = 0;
   reg [7:0] b = 0;
-  wire [8:0] q;
+  wire [7:0] q;
   
   add uut(
+    .clk(clk),
+    .rst(rst),
     .a(a),
     .b(b),
     .q(q)
