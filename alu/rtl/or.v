@@ -1,7 +1,27 @@
 module or_gate (
-  input  [9:0] a, b,
+  input clk,
+  input rst,
+  input  [9:0] a,
+  input  [9:0] b,
   output [9:0] q);
 
-  assign q = a | b;
+  reg [9:0] a_internal;
+  reg [9:0] b_internal;
+  reg [9:0] q_internal;
+
+  always @(posedge clk) begin
+    if (rst) begin
+      a_internal <= 0;
+      b_internal <= 0;
+      q_internal <= 0;
+    end
+    else begin
+      a_internal <= a;
+      b_internal <= b;
+      q_internal <= a_internal | b_internal;
+    end
+  end
+
+  assign q = q_internal;
 
 endmodule
