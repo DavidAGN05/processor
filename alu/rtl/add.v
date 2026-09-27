@@ -22,6 +22,6 @@ module add (
     end
   end
 
-  assign q = q_internal[7:0];
+  assign q = q_internal;
 
 endmodule
