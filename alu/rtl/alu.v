@@ -2,7 +2,7 @@
 `include "sub.v"
 `include "mult.v"
 `include "shift.v"
-`include "rol.v"
+// `include "rol.v"
 `include "or_gate.v"
 `include "and_gate.v"
 `include "nand_gate.v"
@@ -22,7 +22,7 @@ module alu (
   wire [8:0] subtract_result;
   wire [15:0] multiply_result;
   wire [7:0] shift_result;
-  wire [7:0] rotate_result;
+//  wire [7:0] rotate_result;
   wire [9:0] or_result;
   wire [7:0] and_result;
   wire [7:0] nand_result;
@@ -61,13 +61,13 @@ module alu (
     .q(shift_result)
   );
 
-  rol rotate_unit (
-    .clk(clk),
-    .rst(rst),
-    .a(a[7:0]),
-    .b(b[7:0]),
-    .q(rotate_result)
-  );
+  // rol rotate_unit (
+  //   .clk(clk),
+  //   .rst(rst),
+  //   .a(a[7:0]),
+  //   .b(b[7:0]),
+  //   .q(rotate_result)
+  // );
 
   or_gate or_unit (
     .clk(clk),
@@ -114,7 +114,8 @@ module alu (
       4'd1: q = {{1{subtract_result[8]}}, subtract_result};
       4'd2: q = multiply_result[9:0];
       4'd3: q = {2'b00, shift_result};
-      4'd4: q = {2'b00, rotate_result};
+      // 4'd4: q = {2'b00, rotate_result};
+      4'd4: q = 10'b0; // ROL disabled
       4'd5: q = or_result;
       4'd6: q = {2'b00, and_result};
       4'd7: q = {2'b00, nand_result};
