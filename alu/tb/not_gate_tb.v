@@ -1,4 +1,4 @@
-module not_tb();
+module not_gate_tb();
 
   reg clk = 1;
   reg rst = 1;

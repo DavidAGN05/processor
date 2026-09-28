@@ -1,4 +1,4 @@
-module xnor_tb();
+module xnor_gate_tb();
 
   reg clk = 1;
   reg rst = 1;

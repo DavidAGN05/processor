@@ -1,4 +1,4 @@
-module or_tb();
+module or_gate_tb();
 
   reg clk = 1;
   reg rst = 1;
