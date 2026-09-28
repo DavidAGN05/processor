@@ -3,11 +3,11 @@
 `include "mult.v"
 `include "shift.v"
 `include "rol.v"
-`include "or.v"
-`include "and.v"
-`include "nand.v"
-`include "xnor.v"
-`include "not.v"
+`include "or_gate.v"
+`include "and_gate.v"
+`include "nand_gate.v"
+`include "xnor_gate.v"
+`include "not_gate.v"
 
 module alu (
   input signed [8:0] a,
