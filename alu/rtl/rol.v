@@ -1,7 +1,7 @@
 module rol (
   input clk,
   input rst,
-  input unsigned [7:0] a,
+  input [7:0] a,
   input [7:0] b,
   output [7:0] q
 );
