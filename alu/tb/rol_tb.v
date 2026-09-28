@@ -60,6 +60,10 @@ module rol_tb();
     a = 8'b0000_0111; b = 8'b1111_0000;
     #(2*period);
 
+    // 0000_0001 ROL 255
+    a = 8'b1111_1111; b = 8'b0000_0001;
+    #(2*period);
+
     #(10*period);
     $finish;
   end
