@@ -10,94 +10,116 @@
 `include "not_gate.v"
 
 module alu (
-  input signed [8:0] a,
-  input signed [8:0] b,
+  input clk,
+  input rst,
+  input [9:0] a,
+  input [9:0] b,
   input [3:0] s,
-  output reg signed [9:0] q
+  output reg [9:0] q
 );
 
-  wire [9:0] add_result;
-  wire [9:0] subtract_result;
-  wire [7:0] multiply_result;
-  wire [8:0] shift_result;
-  wire [8:0] rotate_result;
-  wire [8:0] or_result;
-  wire [8:0] and_result;
-  wire [8:0] nand_result;
-  wire [8:0] xnor_result;
-  wire [8:0] not_result;
+  wire [8:0] add_result;
+  wire [8:0] subtract_result;
+  wire [15:0] multiply_result;
+  wire [7:0] shift_result;
+  wire [7:0] rotate_result;
+  wire [9:0] or_result;
+  wire [7:0] and_result;
+  wire [7:0] nand_result;
+  wire [7:0] xnor_result;
+  wire [7:0] not_result;
 
   add add_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(add_result)
   );
 
   sub subtract_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(subtract_result)
   );
 
   mult multiply_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(multiply_result)
   );
 
   shift shift_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(shift_result)
   );
 
   rol rotate_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(rotate_result)
   );
 
   or_gate or_unit (
+    .clk(clk),
+    .rst(rst),
     .a(a),
     .b(b),
     .q(or_result)
   );
 
   and_gate and_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(and_result)
   );
 
   nand_gate nand_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(nand_result)
   );
 
   xnor_gate xnor_unit (
-    .a(a),
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .a(a[7:0]),
+    .b(b[7:0]),
     .q(xnor_result)
   );
 
   not_gate not_unit (
-    .b(b),
+    .clk(clk),
+    .rst(rst),
+    .b(b[7:0]),
     .q(not_result)
   );
 
   always @(*) begin
     case (s)
-      4'd0: q = add_result; // 10-bit result for addition
-      4'd1: q = subtract_result; // 10-bit result for subtraction
-      4'd2: q = {2'b00, multiply_result}; // 10-bit result for multiplication (zero-extended)
-      4'd3: q = {1'b0, shift_result}; // 10-bit result for right shift (zero-extended)
-      4'd4: q = {1'b0, rotate_result}; // 10-bit result for rotate left (zero-extended) 
-      4'd5: q = {1'b0, or_result}; // 10-bit result for OR operation (zero-extended)
-      4'd6: q = {1'b0, and_result}; // 10-bit result for AND operation (zero-extended)
-      4'd7: q = {1'b0, nand_result}; // 10-bit result for NAND operation (zero-extended)
-      4'd8: q = {1'b0, xnor_result}; // 10-bit result for XNOR operation (zero-extended)
-      4'd9: q = {1'b0, not_result}; // 10-bit result for NOT operation (zero-extended)
+      4'd0: q = {{1{add_result[8]}}, add_result};
+      4'd1: q = {{1{subtract_result[8]}}, subtract_result};
+      4'd2: q = multiply_result[9:0];
+      4'd3: q = {2'b00, shift_result};
+      4'd4: q = {2'b00, rotate_result};
+      4'd5: q = or_result;
+      4'd6: q = {2'b00, and_result};
+      4'd7: q = {2'b00, nand_result};
+      4'd8: q = {2'b00, xnor_result};
+      4'd9: q = {2'b00, not_result};
       default: q = 10'b0;
     endcase
   end

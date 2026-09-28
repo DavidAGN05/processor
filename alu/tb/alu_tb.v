@@ -1,11 +1,16 @@
 module alu_tb();
 
-	reg signed [9:0] a = 0;
-	reg signed [9:0] b = 0;
+	reg clk = 1;
+	reg rst = 1;
+	reg [9:0] a = 0;
+	reg [9:0] b = 0;
 	reg [3:0] s = 0;
-	wire signed [9:0] q;
+	wire [9:0] q;
+	integer period = 10;
 
 	alu uut(
+		.clk(clk),
+		.rst(rst),
 		.a(a),
 		.b(b),
 		.s(s),
@@ -13,8 +18,16 @@ module alu_tb();
 	);
 
 	initial begin
+		forever #(period/2) clk = ~clk;
+	end
+
+	initial begin
 		$dumpfile("dump.vcd");
 		$dumpvars;
+
+		#(2*period);
+		rst = 1'b0;
+		#(2*period);
 
 		// All zero inputs: 0 + 0, 0 - 0, 0 * 0, and all bitwise operations
 		a = 10'b00_0000_0000; b = 10'b00_0000_0000;
