@@ -1,10 +1,12 @@
-// Top-level RGB-to-grayscale image processor.
-//
-// Load the complete input image with load_en, then pulse start.
-// After done is asserted, use read_en/read_addr to read output pixels.
+`include "image_memory.v"
+`include "input_memory.v"
+`include "output_memory.v"
+`include "RGB_BW.v"
+`include "controller.v"
+
 module top (
   input        clk,
-  input        reset,
+  input        rst,
 
   input        load_en,
   input  [13:0] load_addr,
@@ -65,7 +67,7 @@ module top (
 
   controller control (
     .clk                   (clk),
-    .reset                 (reset),
+    .reset                 (rst),
     .start                 (start),
     .input_read_valid      (input_read_valid),
     .read_en               (read_en),
