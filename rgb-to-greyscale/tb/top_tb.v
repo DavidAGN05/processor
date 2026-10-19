@@ -76,7 +76,9 @@ module top_tb;
     load_in = 1'b0;
     addr_in = 6'd0;
 
-    while (!ready_out && cycles < IMAGE_SIZE * 3) begin
+    // Each pixel requires PROCESS, CONVERT, and WRITE_OUT cycles.
+    // Include the LOAD-to-PROCESS state transition in the timeout.
+    while (!ready_out && cycles < IMAGE_SIZE * 3 + 2) begin
       @(posedge clk);
       cycles = cycles + 1;
     end
