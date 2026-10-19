@@ -1,54 +1,45 @@
-module RGB_BW_tb();
+`timescale 1ns/1ps
 
-	reg [7:0] red = 0;
-	reg [7:0] green = 0;
-	reg [7:0] blue = 0;
-	wire [23:0] gray_pixel;
-	integer failures = 0;
+module RGB_BW_tb;
+  reg [7:0] red;
+  reg [7:0] green;
+  reg [7:0] blue;
+  wire [7:0] bw;
+  integer failures;
 
-	RGB_BW uut(
-		.red(red),
-		.green(green),
-		.blue(blue),
-		.gray_pixel(gray_pixel)
-	);
+  RGB_BW dut (.red(red), .green(green), .blue(blue), .bw(bw));
 
-	task check_pixel;
-		input [7:0] test_red;
-		input [7:0] test_green;
-		input [7:0] test_blue;
-		input [7:0] expected_gray;
-		begin
-			red = test_red;
-			green = test_green;
-			blue = test_blue;
-			#1;
-			if (gray_pixel !== {expected_gray, expected_gray, expected_gray}) begin
-				$display("FAIL R=%0d G=%0d B=%0d: expected %h, got %h",
-					test_red, test_green, test_blue,
-					{expected_gray, expected_gray, expected_gray}, gray_pixel);
-				failures = failures + 1;
-			end
-		end
-	endtask
+  task check;
+    input [7:0] r;
+    input [7:0] g;
+    input [7:0] b;
+    input [7:0] expected;
+    begin
+      red = r;
+      green = g;
+      blue = b;
+      #1;
+      if (bw !== expected) begin
+        $display("FAIL RGB=(%0d,%0d,%0d): expected %0d, got %0d",
+                 r, g, b, expected, bw);
+        failures = failures + 1;
+      end
+    end
+  endtask
 
-	initial begin
-		$dumpfile("dump.vcd");
-		$dumpvars;
+  initial begin
+    failures = 0;
+    check(8'd0, 8'd0, 8'd0, 8'd0);
+    check(8'd255, 8'd0, 8'd0, 8'd53);
+    check(8'd0, 8'd255, 8'd0, 8'd181);
+    check(8'd0, 8'd0, 8'd255, 8'd17);
+    check(8'd255, 8'd255, 8'd255, 8'd253);
+    check(8'd100, 8'd150, 8'd200, 8'd139);
 
-		check_pixel(8'd0, 8'd0, 8'd0, 8'd0);
-		check_pixel(8'd255, 8'd0, 8'd0, 8'd53);
-		check_pixel(8'd0, 8'd255, 8'd0, 8'd181);
-		check_pixel(8'd0, 8'd0, 8'd255, 8'd17);
-		check_pixel(8'd255, 8'd255, 8'd255, 8'd253);
-		check_pixel(8'd100, 8'd150, 8'd200, 8'd139);
-
-		if (failures == 0)
-			$display("RGB_BW_tb PASSED");
-		else
-			$display("RGB_BW_tb FAILED: %0d mismatches", failures);
-
-		#10 $finish;
-	end
-
+    if (failures == 0)
+      $display("RGB_BW_tb PASSED");
+    else
+      $display("RGB_BW_tb FAILED: %0d failures", failures);
+    $finish;
+  end
 endmodule
