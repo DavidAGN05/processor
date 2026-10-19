@@ -6,7 +6,7 @@
 module top (
   input wire clk,
   input wire rst,
-  input wire [13:0] addr_in,
+  input wire [5:0] addr_in,
   input wire [7:0] red_in,
   input wire [7:0] green_in,
   input wire [7:0] blue_in,
@@ -22,10 +22,10 @@ module top (
   wire color_RAM_wr;
   wire out_RAM_en;
   wire out_RAM_wr;
-  wire [13:0] rgb_addr;
-  wire [13:0] out_addr;
-  wire [13:0] count;
-  wire [13:0] count0;
+  wire [5:0] rgb_addr;
+  wire [5:0] out_addr;
+  wire [5:0] count;
+  wire [5:0] count0;
   wire [7:0] red_out;
   wire [7:0] green_out;
   wire [7:0] blue_out;
@@ -53,7 +53,7 @@ module top (
     .clk(clk),
     .load_in(load_in),
     .rst(rst),
-    .last_pixel(count0 == 14'd16383),
+    .last_pixel(count0 == 6'd63),
     .clk_rst(clk_rst),
     .addr_sel1(addr_sel1),
     .addr_sel2(addr_sel2),

@@ -1,8 +1,8 @@
 module top_tb;
-  localparam IMAGE_SIZE = 16384;
+  localparam IMAGE_SIZE = 64;
   reg clk;
   reg rst;
-  reg [13:0] addr_in;
+  reg [5:0] addr_in;
   reg [7:0] red_in;
   reg [7:0] green_in;
   reg [7:0] blue_in;
@@ -48,7 +48,7 @@ module top_tb;
 
     clk = 1'b0;
     rst = 1'b1;
-    addr_in = 14'd0;
+    addr_in = 6'd0;
     red_in = 8'd0;
     green_in = 8'd0;
     blue_in = 8'd0;
@@ -63,7 +63,7 @@ module top_tb;
     @(negedge clk);
     load_in = 1'b1;
     for (i = 0; i < IMAGE_SIZE; i = i + 1) begin
-      addr_in = i[13:0];
+      addr_in = i[5:0];
       red_in = (i * 13 + 7) & 255;
       green_in = (i * 29 + 19) & 255;
       blue_in = (i * 47 + 31) & 255;
@@ -74,7 +74,7 @@ module top_tb;
 
     @(negedge clk);
     load_in = 1'b0;
-    addr_in = 14'd0;
+    addr_in = 6'd0;
 
     while (!ready_out && cycles < IMAGE_SIZE * 3) begin
       @(posedge clk);
@@ -88,7 +88,7 @@ module top_tb;
 
     for (i = 0; i < IMAGE_SIZE; i = i + 1) begin
       @(negedge clk);
-      addr_in = i[13:0];
+      addr_in = i[5:0];
       @(posedge clk);
       #1;
       if (results_out !== expected_gray(i)) begin

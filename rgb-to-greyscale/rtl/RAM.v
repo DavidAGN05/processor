@@ -1,14 +1,14 @@
 module RAM (
     input wire clk,
     input wire rst,
-    input wire [13:0] addr,
+    input wire [5:0] addr,
     input wire en,
     input wire wr,
     input wire [7:0] d_in,
     output reg [7:0] d_out
 );
 
-    reg [7:0] memory [0:16383]; // 16K x 8-bit RAM
+    reg [7:0] memory [0:63]; // 64 x 8-bit RAM
 
     always @(posedge clk) begin
         if (rst) begin

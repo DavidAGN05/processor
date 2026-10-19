@@ -1,7 +1,7 @@
 module RAM_tb;
   reg clk;
   reg rst;
-  reg [13:0] addr;
+  reg [5:0] addr;
   reg en;
   reg wr;
   reg [7:0] d_in;
@@ -16,7 +16,7 @@ module RAM_tb;
 
     clk = 0;
     rst = 1;
-    addr = 14'd12;
+    addr = 6'd12;
     d_in = 8'hA5;
     en = 1;
     wr = 1;
