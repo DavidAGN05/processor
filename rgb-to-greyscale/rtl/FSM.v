@@ -78,6 +78,9 @@ module FSM (
             end
             STATE_PROCESS:
                 color_RAM_en = 1'b1;
+            STATE_CONVERT: begin
+                // Hold the RAM outputs while RGB_BW registers the result.
+            end
             STATE_WRITE_OUT: begin
                 out_RAM_en = 1'b1;
                 out_RAM_wr = 1'b1;
