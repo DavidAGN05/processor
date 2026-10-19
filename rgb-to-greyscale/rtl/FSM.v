@@ -20,21 +20,26 @@ module FSM (
 
     reg [1:0] current_state;
     reg [1:0] next_state;
+    reg load_started;
 
     always @(posedge clk) begin
-        if (rst)
+        if (rst) begin
             current_state <= STATE_LOAD;
-        else
+            load_started <= 1'b0;
+        end else begin
             current_state <= next_state;
+            if (current_state == STATE_DONE && load_in)
+                load_started <= 1'b0;
+            else if (current_state == STATE_LOAD && load_in)
+                load_started <= 1'b1;
+        end
     end
 
     always @(*) begin
         next_state = current_state;
         case (current_state)
             STATE_LOAD:
-                if (load_in)
-                    next_state = STATE_LOAD;
-                else
+                if (!load_in && load_started)
                     next_state = STATE_PROCESS;
             STATE_PROCESS:
                 next_state = STATE_WRITE_OUT;

@@ -59,13 +59,17 @@ module top_tb;
     repeat (2) @(posedge clk);
     rst = 1'b0;
 
+    // Keep the FSM in LOAD until the first input write has been presented.
+    @(negedge clk);
+    load_in = 1'b1;
     for (i = 0; i < IMAGE_SIZE; i = i + 1) begin
-      @(negedge clk);
-      load_in = 1'b1;
       addr_in = i[13:0];
       red_in = (i * 13 + 7) & 255;
       green_in = (i * 29 + 19) & 255;
       blue_in = (i * 47 + 31) & 255;
+      @(posedge clk);
+      if (i != IMAGE_SIZE - 1)
+        @(negedge clk);
     end
 
     @(negedge clk);
