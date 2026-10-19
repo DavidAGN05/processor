@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module RGB_BW_tb;
   reg [7:0] red;
   reg [7:0] green;
@@ -28,6 +26,9 @@ module RGB_BW_tb;
   endtask
 
   initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(0, RGB_BW_tb);
+
     failures = 0;
     check(8'd0, 8'd0, 8'd0, 8'd0);
     check(8'd255, 8'd0, 8'd0, 8'd63);

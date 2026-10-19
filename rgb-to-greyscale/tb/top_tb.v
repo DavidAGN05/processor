@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module top_tb;
   localparam IMAGE_SIZE = 16384;
   reg clk;
@@ -15,7 +13,7 @@ module top_tb;
   integer failures;
   integer cycles;
 
-  Top dut (
+  top dut (
     .clk(clk),
     .rst(rst),
     .addr_in(addr_in),
@@ -45,6 +43,9 @@ module top_tb;
   always #5 clk = ~clk;
 
   initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(0, top_tb);
+
     clk = 1'b0;
     rst = 1'b1;
     addr_in = 14'd0;

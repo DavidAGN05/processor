@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module counter_tb;
   reg clk;
   reg rst;
@@ -11,6 +9,9 @@ module counter_tb;
   always #5 clk = ~clk;
 
   initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(0, counter_tb);
+
     clk = 0;
     rst = 1;
     enable = 0;

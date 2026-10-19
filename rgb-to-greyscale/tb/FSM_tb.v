@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module FSM_tb;
   reg clk;
   reg rst;
@@ -24,6 +22,9 @@ module FSM_tb;
   always #5 clk = ~clk;
 
   initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(0, FSM_tb);
+
     clk = 0;
     rst = 1;
     load_in = 1;

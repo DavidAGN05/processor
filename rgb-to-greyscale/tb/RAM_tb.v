@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module RAM_tb;
   reg clk;
   reg [13:0] addr;
@@ -12,6 +10,9 @@ module RAM_tb;
   always #5 clk = ~clk;
 
   initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(0, RAM_tb);
+
     clk = 0;
     addr = 14'd12;
     d_in = 8'hA5;
