@@ -1,12 +1,12 @@
-"""Convert a 128 x 128 RGB image using the fixed-point hardware formula.
+"""Convert a 128 x 128 RGB image using the hardware shift-and-add formula.
 
-The Verilog implementation can use the same arithmetic:
+The Verilog implementation uses:
 
-	gray = (54 * red + 182 * green + 18 * blue) >> 8
+	gray = (red >> 2) + (green >> 1) + (green >> 3)
+	       + (green >> 4) + (blue >> 4)
 
-The coefficients are Q8 fixed-point approximations:
-54 / 256 ~= 0.21, 182 / 256 ~= 0.71, and 18 / 256 ~= 0.07.
-The right shift truncates the fractional part. The result is written as an
+This approximates 0.25R + 0.6875G + 0.0625B. The coefficients sum to 1.0,
+and each right shift truncates fractional bits. The result is written as an
 RGB image with the grayscale value copied to every channel.
 """
 
@@ -19,27 +19,14 @@ from typing import Iterable
 
 IMAGE_WIDTH = 128
 IMAGE_HEIGHT = 128
-FRACTIONAL_BITS = 8
 INPUT_WIDTH = 8
-PRODUCT_WIDTH = 16
-ACCUMULATOR_WIDTH = 16
 OUTPUT_WIDTH = 8
-COEFFICIENT_RED = 54
-COEFFICIENT_GREEN = 182
-COEFFICIENT_BLUE = 18
 INPUT_MAX = (1 << INPUT_WIDTH) - 1
 OUTPUT_MAX = (1 << OUTPUT_WIDTH) - 1
-PRODUCT_MASK = (1 << PRODUCT_WIDTH) - 1
-ACCUMULATOR_MASK = (1 << ACCUMULATOR_WIDTH) - 1
 
 
 def rgb_to_grayscale(red: int, green: int, blue: int) -> int:
-	"""Return one 8-bit grayscale value using the hardware fixed-point rule.
-
-	Inputs are unsigned 8-bit channels. Each coefficient is an unsigned Q8
-	value, products are 16-bit, and the weighted sum is an unsigned 16-bit
-	accumulator. The shift is truncation (no rounding), matching the RTL.
-	"""
+	"""Return one 8-bit grayscale value using the hardware shift-and-add rule."""
 	channels = (red, green, blue)
 	if any(
 		not isinstance(channel, int) or not 0 <= channel <= INPUT_MAX
@@ -47,15 +34,7 @@ def rgb_to_grayscale(red: int, green: int, blue: int) -> int:
 	):
 		raise ValueError("RGB channels must be integers from 0 through 255")
 
-	red_product = (COEFFICIENT_RED * red) & PRODUCT_MASK
-	green_product = (COEFFICIENT_GREEN * green) & PRODUCT_MASK
-	blue_product = (COEFFICIENT_BLUE * blue) & PRODUCT_MASK
-	weighted_sum = red_product + green_product + blue_product
-
-	# Explicitly model the RTL accumulator width. For valid 8-bit inputs,
-	# the maximum sum is 64,770, so no valid value is lost here.
-	weighted_sum &= ACCUMULATOR_MASK
-	grayscale = weighted_sum >> FRACTIONAL_BITS
+	grayscale = (red >> 2) + (green >> 1) + (green >> 3) + (green >> 4) + (blue >> 4)
 	return min(grayscale, OUTPUT_MAX)
 
 

@@ -5,16 +5,16 @@ module RGB_BW (
   output reg [7:0] bw
 );
 
-  reg [15:0] red_product;
-  reg [15:0] green_product;
-  reg [15:0] blue_product;
-  reg [16:0] weighted_sum;
+  reg [8:0] weighted_sum;
 
   always @(*) begin
-    red_product = 16'd54 * red;
-    green_product = 16'd182 * green;
-    blue_product = 16'd18 * blue;
-    weighted_sum = red_product + green_product + blue_product;
-    bw = weighted_sum[15:8];
+    // Shift-and-add approximation:
+    // 0.25*red + 0.6875*green + 0.0625*blue
+    weighted_sum = (red >> 2)
+                 + (green >> 1)
+                 + (green >> 3)
+                 + (green >> 4)
+                 + (blue >> 4);
+    bw = weighted_sum[7:0];
   end
 endmodule

@@ -32,13 +32,13 @@ module top_tb;
     reg [7:0] r;
     reg [7:0] g;
     reg [7:0] b;
-    reg [15:0] sum;
+    reg [8:0] sum;
     begin
       r = (index * 13 + 7) & 255;
       g = (index * 29 + 19) & 255;
       b = (index * 47 + 31) & 255;
-      sum = 16'd54 * r + 16'd182 * g + 16'd18 * b;
-      expected_gray = sum[15:8];
+      sum = (r >> 2) + (g >> 1) + (g >> 3) + (g >> 4) + (b >> 4);
+      expected_gray = sum[7:0];
     end
   endfunction
 

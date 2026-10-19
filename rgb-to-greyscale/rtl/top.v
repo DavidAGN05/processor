@@ -45,7 +45,7 @@ module Top (
     .clk(clk),
     .rst(clk_rst),
     .enable(main_counter_enable),
-    .data(count0),
+    .data(count),
     .count(count0)
   );
 
