@@ -32,7 +32,7 @@ module RGB_BW_tb;
     failures = 0;
     check(8'd0, 8'd0, 8'd0, 8'd0);
     check(8'd255, 8'd0, 8'd0, 8'd63);
-    check(8'd0, 8'd255, 8'd0, 8'd175);
+    check(8'd0, 8'd255, 8'd0, 8'd173);
     check(8'd0, 8'd0, 8'd255, 8'd15);
     check(8'd255, 8'd255, 8'd255, 8'd251);
     check(8'd100, 8'd150, 8'd200, 8'd139);

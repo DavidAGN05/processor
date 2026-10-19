@@ -3,7 +3,7 @@
 `include "RAM.v"
 `include "RGB_BW.v"
 
-module Top (
+module top (
   input wire clk,
   input wire rst,
   input wire [13:0] addr_in,
@@ -66,6 +66,7 @@ module Top (
 
   RAM Red_RAM (
     .clk(clk),
+    .rst(rst),
     .addr(rgb_addr),
     .en(color_RAM_en),
     .wr(color_RAM_wr),
@@ -75,6 +76,7 @@ module Top (
 
   RAM Green_RAM (
     .clk(clk),
+    .rst(rst),
     .addr(rgb_addr),
     .en(color_RAM_en),
     .wr(color_RAM_wr),
@@ -84,6 +86,7 @@ module Top (
 
   RAM Blue_RAM (
     .clk(clk),
+    .rst(rst),
     .addr(rgb_addr),
     .en(color_RAM_en),
     .wr(color_RAM_wr),
@@ -100,6 +103,7 @@ module Top (
 
   RAM Out_RAM (
     .clk(clk),
+    .rst(rst),
     .addr(out_addr),
     .en(out_RAM_en),
     .wr(out_RAM_wr),
