@@ -13,13 +13,14 @@ module FSM (
     output reg ready_out
 );
 
-    localparam STATE_LOAD = 2'd0;
-    localparam STATE_PROCESS = 2'd1;
-    localparam STATE_WRITE_OUT = 2'd2;
-    localparam STATE_DONE = 2'd3;
+    localparam STATE_LOAD = 3'd0;
+    localparam STATE_PROCESS = 3'd1;
+    localparam STATE_CONVERT = 3'd2;
+    localparam STATE_WRITE_OUT = 3'd3;
+    localparam STATE_DONE = 3'd4;
 
-    reg [1:0] current_state;
-    reg [1:0] next_state;
+    reg [2:0] current_state;
+    reg [2:0] next_state;
     reg load_started;
 
     always @(posedge clk) begin
@@ -42,6 +43,8 @@ module FSM (
                 if (!load_in && load_started)
                     next_state = STATE_PROCESS;
             STATE_PROCESS:
+                next_state = STATE_CONVERT;
+            STATE_CONVERT:
                 next_state = STATE_WRITE_OUT;
             STATE_WRITE_OUT:
                 if (last_pixel)

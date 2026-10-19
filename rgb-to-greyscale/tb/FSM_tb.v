@@ -43,6 +43,11 @@ module FSM_tb;
 
     @(posedge clk);
     #1;
+    if (out_RAM_en || out_RAM_wr)
+      $display("FSM_tb FAILED: convert controls");
+
+    @(posedge clk);
+    #1;
     if (!out_RAM_en || !out_RAM_wr)
       $display("FSM_tb FAILED: write controls");
 

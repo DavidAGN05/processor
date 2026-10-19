@@ -95,6 +95,8 @@ module top (
   );
 
   RGB_BW converter (
+    .clk(clk),
+    .rst(rst),
     .red(red_out),
     .green(green_out),
     .blue(blue_out),
